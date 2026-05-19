@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FusioniX - The Ultimate Sustech Hackathon</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* --- General Reset & Styling Core --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --matrix-green: #00FF66;
+      --dark-bg: #030c08;
+      --panel-bg: rgba(14, 43, 31, 0.65);
+      --neon-blue: #0072FF;
+      --cyan-glow: #00c3ff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--dark-bg);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* --- Hero Section & Matrix Canvas Setup --- */
+    .hero-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.45;
+    }
+
+    /* --- Navigation Bar Layout --- */
+    header {
+      /* position: relative; */
+      position: fixed;
+      z-index: 10000;
+      width: 100%;
+      max-width: 1047px;
+      border: 2px solid var(--neon-blue);
+      border-radius: 50px;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 80px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      color: #a3c2c2;
+      text-decoration: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-bottom: 1px dashed transparent;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+
+      color: var(--matrix-green);
+      border-bottom: 1px dashed var(--matrix-green);
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+
+
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      color: var(--matrix-green);
+      font-size: 0.8rem;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .logo img {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      object-fit: cover;
+    }
+
+    /* --- Main Hero Content Grid --- */
+    .hero-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1334px;
+      /* margin: auto 0; */
+      margin-top: 200px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 50px;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Left side Main Card */
+    .title-card {
+      background: linear-gradient(140deg, #7373736b, #085A16);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      margin-right: 30%;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+    }
+
+    .title-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 25px rgba(73, 255, 88, 0.993);
+    }
+
+    .title-card h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      color: #fcedd8;
+      line-height: 1.3;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    /* Right side Perks Badges */
+    .perks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .perk-item {
+      background: linear-gradient(140deg, #7373736b, #085A16);
+      border: 1px solid var(--matrix-green);
+      border-radius: 30px;
+      padding: 15px 30px;
+      font-size: 1.5rem;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      letter-spacing: 1px;
+      box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2);
+    }
+
+    .perk-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 25px rgba(73, 255, 88, 0.993);
+    }
+
+    /* Hero Action Button */
+    .register-btn-box {
+      grid-column: span 2;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .register-btn {
+      background: linear-gradient(180deg, #0051d4d0, #4364f7d0, #6fb1fccf);
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      padding: 12px 50px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(67, 100, 247, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .register-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 25px rgba(73, 107, 255, 0.993);
+    }
+
+    /* --- About Us Section (Exact Design Build) --- */
+    .about-section {
+      background-color: var(--dark-bg);
+      width: 100%;
+      padding: 100px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid rgba(0, 255, 102, 0.05);
+    }
+
+    .about-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 5.5rem;
+      font-weight: 500;
+      color: #00FF9D;
+      margin-bottom: 60px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .card-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1366px;
+      display: grid;
+
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
+
+    /* Outer Glow Graphic Shape Wrapper */
+    .border-glow-container {
+      grid-column: 1;
+      grid-row: 1;
+      background: linear-gradient(135deg, #008080, #00ffcc44);
+      padding: 2px;
+      box-shadow: 5px 10px 10px var(--neon-blue);
+      border-radius: 35px;
+      clip-path: url(#custom-curve-clip);
+      filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.15));
+    }
+
+    /* Main Copy Panel Text Block */
+    .about-card-body {
+      clip-path: url(#custom-curve-clip);
+      background: #081511;
+      padding: 55px 180px 55px 50px;
+      border-radius: 33px;
+      color: #d1e2dc;
+      font-size: 1.15rem;
+      line-height: 1.75;
+      font-weight: 400px;
+      text-align: left;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      width: 99.5%;
+
+    }
+
+    .about-card-body p {
+      width: 85%;
+    }
+
+
+    /* Right Nested Pill Button Styling */
+    .know-more-btn {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: end;
+      margin-right: -25px;
+      z-index: 10;
+      background: #112720;
+      border: 3px solid var(--cyan-glow);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 18px 32px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 195, 255, 0.4),
+        inset 0 0 10px rgba(0, 195, 255, 0.2);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .know-more-btn:hover {
+      background: var(--cyan-glow);
+      color: #030c08;
+      box-shadow: 0 0 30px var(--cyan-glow);
+    }
+
+    /* --- Layout Responsiveness Breakpoints --- */
+    @media (max-width: 950px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero-container {
+        grid-template-columns: 1fr;
+      }
+
+      .register-btn-box {
+        grid-column: span 1;
+      }
+
+      .about-title {
+        font-size: 3.5rem;
+        margin-bottom: 40px;
+      }
+
+      .border-glow-container {
+        clip-path: none;
+        border-radius: 20px;
+      }
+
+      .about-card-body {
+        clip-path: none;
+        padding: 30px;
+        border-radius: 18px;
+      }
+
+      .about-card-body p {
+        width: 100%;
+      }
+
+      .card-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .know-more-btn {
+        margin-right: 0;
+        justify-self: center;
+      }
+
+      .title-card {
+        margin-right: 0px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <clipPath id="custom-curve-clip" clipPathUnits="objectBoundingBox">
+        <path d="M 0.03,0 
+                         L 0.85,0 
+                         A 0.03 0.03 0 0 1 0.88 0.02
+                         C 0.88 0.15, 0.75 0.35, 0.75 0.5
+                         C 0.75 0.65, 0.88 0.85, 0.88 0.98
+                         A 0.03 0.03 0 0 1 0.85 1
+                         L 0.03,1 
+                         A 0.03 0.03 0 0 1 0,0.95 
+                         L 0,0.05 
+                         A 0.03 0.03 0 0 1 0.03,0 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <section class="hero-section" id="home">
+    <canvas id="matrixCanvas"></canvas>
+
+    <header>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+      </ul>
+      <div class="logo"><img src="image/logo.png" alt="fusinex"></div>
+      <ul class="nav-links">
+        <li><a href="#teams">Teams</a></li>
+        <li><a href="#sponsors">Sponsors</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </header>
+
+    <div class="hero-container">
+      <div class="title-card">
+        <h1>The Ultimate Sustainable Tech & IoT Innovation Hackathon</h1>
+      </div>
+
+      <div class="perks-list">
+        <div class="perk-item">50K Prize Pool</div>
+        <div class="perk-item">24Hr Hackathon</div>
+        <div class="perk-item">Org. By ECE & CSE(IoT)</div>
+      </div>
+
+      <div class="register-btn-box">
+        <button class="register-btn">Register Now!!</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <h1 class="about-title">About Us</h1>
+
+    <div class="card-wrapper">
+      <div class="border-glow-container">
+        <div class="about-card-body">
+          <p>FusioniX is a 24-hour hackathon by the Departments of ECE and CSE (IoT) at the University of Engineering &
+            Management, where participants transform ideas into real-world solutions through integrated hardware and
+            software innovation. With no fixed domain—spanning intelligent systems, environmental monitoring, industrial
+            safety, and beyond—teams ideate, design, and prototype across multiple competitive rounds. Judged on
+            creativity and real-world impact, top performers win prizes and cash rewards alongside valuable feedback
+            from industry experts. Full meals provided. At FusioniX, innovation is expected. Ideas become solutions.</p>
+
+        </div>
+      </div>
+
+      <button class="know-more-btn">Want to Know More??</button>
+    </div>
+  </section>
+
+  <script>
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=_";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+
+    const rainDrops = [];
+    for (let x = 0; x < columns; x++) {
+      rainDrops[x] = 1;
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(3, 12, 8, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00FF66';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < rainDrops.length; i++) {
+        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+        if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          rainDrops[i] = 0;
+        }
+        rainDrops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+  </script>
+</body>
+
+</html>
