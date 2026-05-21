@@ -425,10 +425,10 @@ section {
 
   /* layered neon glow */
   text-shadow:
-    0 0 10px var(--neon-green),
-    0 0 30px var(--neon-green),
-    0 0 70px var(--neon-green),
-    0 0 70px #00ff8855;
+    0 0 7px var(--neon-green),
+    0 0 25px var(--neon-green),
+    0 0 60px var(--neon-green),
+    0 0 60px #66dda655;
 
   animation: titlePulse 4s ease-in-out infinite;
 }
@@ -575,8 +575,8 @@ section {
     /* Positioning */
 
     .concept{
-      left:-80px;
-      top:520px;
+      left:-10px;
+      top:120px;
       text-align:right;
     }
 
@@ -586,9 +586,9 @@ section {
     }
 
     .software{
-      left:45px;
-      top:70px;
-      text-align:center;
+      left:-80px;
+      top:500px;
+      text-align:right;
     }
 
     .pin{
@@ -640,8 +640,8 @@ section {
     .blue-pin{
       border-color:#3b82ff;
       color:#3b82ff;
-      left:210px;
-      top:520px;
+      left:260px;
+      top:140px;
       box-shadow:0 0 20px rgba(59,130,255,.5);
     }
 
@@ -656,8 +656,8 @@ section {
     .yellow-pin{
       border-color:#d7ff46;
       color:#d7ff46;
-      left:310px;
-      top:100px;
+      left: 200px;
+      top:480px;
       box-shadow:0 0 20px rgba(215,255,70,.5);
     }
     @media(max-width:900px){
@@ -1442,13 +1442,12 @@ section {
       />
 
     </svg>
+    <!-- CONCEPT -->
 
-    <!-- SOFTWARE -->
-
-    <div class="card software yellow">
-      <h2>Software & Logic Sprint</h2>
+    <div class="card concept blue">
+      <h2>Concept Qualifier</h2>
       <p>
-        Teams develop and integrate software with hardware offline
+        Teams submit pitch decks and videos online
       </p>
     </div>
 
@@ -1461,22 +1460,19 @@ section {
       </p>
     </div>
 
-    <!-- CONCEPT -->
+    <!-- SOFTWARE -->
 
-    <div class="card concept blue">
-      <h2>Concept Qualifier</h2>
+    <div class="card software yellow">
+      <h2>Software & Logic Sprint</h2>
       <p>
-        Teams submit pitch decks and videos online
+        Teams develop and integrate software with hardware offline
       </p>
     </div>
 
     <!-- PINS -->
-
-    <div class="pin yellow-pin">⚙</div>
-
+    <div class="pin blue-pin">✦</div>    
     <div class="pin green-pin">⌘</div>
-
-    <div class="pin blue-pin">✦</div>
+    <div class="pin yellow-pin">⚙</div>  
        </div>
   </section> 
 
@@ -1535,7 +1531,6 @@ section {
 
   <!-- ═══════════════════ TEAM SECTION ═══════════════════ -->
   <h1 class="section-title">Team</h1>
-
   <!-- Faculty Coordinators -->
   <div class="group">
     <div class="group-label">Our Faculty Coordinator</div>
