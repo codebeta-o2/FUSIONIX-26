@@ -1300,6 +1300,811 @@ section {
   cursor: pointer;
 }
 
+/* =========================================================
+   =========================================================
+                    FAQ SECTION START
+   =========================================================
+   ========================================================= */
+
+
+/* =========================================================
+   FAQ MAIN SECTION
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   padding  → controls top/bottom spacing
+   background → section background color
+========================================================= */
+
+.faq-section {
+
+  position: relative;
+
+  /* Top Right Bottom Left */
+  padding: 120px 20px 80px;
+
+  overflow: hidden;
+
+  /* Change background color here */
+  background: transparent;
+}
+
+
+
+/* =========================================================
+   FAQ WHITE SPOTLIGHT EFFECT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   width & height → spotlight size
+   top → vertical position
+   opacity → glow visibility
+   blur → softness of glow
+   animation speed → glow speed
+========================================================= */
+
+.faq-spotlight {
+
+  position: absolute;
+
+  top: -160px;
+
+  /* Spotlight size */
+  width: 520px;
+  height: 520px;
+
+  border-radius: 50%;
+
+  /* Blur softness */
+  filter: blur(110px);
+
+  /* Glow intensity */
+  opacity: 0.35;
+
+  z-index: 0;
+
+  /* Animation speed */
+  animation: spotlightGlow 2.5s ease-in-out infinite;
+}
+
+
+
+/* =========================================================
+   LEFT WHITE SPOTLIGHT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   left → horizontal position
+   rgba values → spotlight color
+========================================================= */
+
+.spotlight-left {
+
+  left: -140px;
+
+  background:
+    radial-gradient(circle,
+
+    /* Main spotlight color */
+    rgba(255,255,255,1) 0%,
+
+    rgba(255,255,255,0.55) 25%,
+
+    rgba(255,255,255,0.15) 50%,
+
+    transparent 75%);
+}
+
+
+
+/* =========================================================
+   RIGHT WHITE SPOTLIGHT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   right → horizontal position
+   animation-delay → delay between glows
+========================================================= */
+
+.spotlight-right {
+
+  right: -140px;
+
+  background:
+    radial-gradient(circle,
+
+    rgba(255,255,255,1) 0%,
+
+    rgba(255,255,255,0.55) 25%,
+
+    rgba(255,255,255,0.15) 50%,
+
+    transparent 75%);
+
+  animation-delay: 3.5s;
+}
+
+
+
+/* =========================================================
+   SPOTLIGHT GLOW ANIMATION
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   scale() → glow expansion size
+   translateY() → glow movement
+   opacity → glow visibility
+========================================================= */
+
+@keyframes spotlightGlow {
+
+  0%,100% {
+
+    transform: scale(1) translateY(0px);
+
+    opacity: 0.22;
+  }
+
+  50% {
+
+    transform: scale(1.18) translateY(25px);
+
+    opacity: 0.5;
+  }
+}
+
+
+
+/* =========================================================
+   FAQ TITLE
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size → heading size
+   color → heading color
+   margin-bottom → space below heading
+========================================================= */
+
+.faq-title {
+
+  text-align: center;
+
+  font-family: 'Orbitron', sans-serif;
+
+  font-size: clamp(2rem, 5vw, 4rem);
+
+  /* Change title color */
+  color: #00ff88;
+
+  margin-bottom: 60px;
+
+  /* Glow effect */
+  text-shadow:
+    0 0 2px #00ff88,
+    0 0 6px #00ff88;
+}
+
+
+
+/* =========================================================
+   FAQ CONTAINER
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   max-width → total FAQ width
+   gap → space between FAQ items
+========================================================= */
+
+.faq-container {
+
+  max-width: 1000px;
+
+  margin: auto;
+
+  display: flex;
+
+  flex-direction: column;
+
+  /* Space between FAQ items */
+  gap: 22px;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+
+/* =========================================================
+   SINGLE FAQ ITEM
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   border-radius → roundness
+   border color → outline color
+   blur → glass effect
+========================================================= */
+
+.faq-item {
+
+  background: transparent;
+
+  border: 1px solid rgba(0,255,136,0.18);
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  transition: 0.4s ease;
+
+  backdrop-filter: blur(2px);
+}
+
+
+
+/* =========================================================
+   FAQ HOVER EFFECT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   hover border color
+   glow strength
+========================================================= */
+
+.faq-item:hover {
+
+  border-color: rgba(0,255,136,0.45);
+
+  box-shadow:
+    0 0 12px rgba(0,255,136,0.08),
+    inset 0 0 20px rgba(255,255,255,0.02);
+}
+
+
+
+/* =========================================================
+   FAQ QUESTION BUTTON
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   padding → internal spacing
+   font-size → question text size
+   color → text color
+========================================================= */
+
+.faq-question {
+
+  width: 100%;
+
+  background: transparent;
+
+  border: none;
+
+  color: white;
+
+  /* Internal spacing */
+  padding: 24px 30px;
+
+  font-size: 1.1rem;
+
+  font-family: 'Orbitron', sans-serif;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  cursor: pointer;
+}
+
+
+
+/* =========================================================
+   FAQ PLUS / MINUS ICON
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size → icon size
+   color → icon color
+========================================================= */
+
+.faq-icon {
+
+  font-size: 2rem;
+
+  color: #00ff88;
+
+  transition: 0.3s;
+}
+
+
+
+/* =========================================================
+   FAQ ANSWER CONTAINER
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   transition speed
+   internal spacing
+========================================================= */
+
+.faq-answer {
+
+  max-height: 0;
+
+  overflow: hidden;
+
+  transition:
+    max-height 0.5s ease,
+    padding 0.4s ease;
+
+  padding: 0 30px;
+}
+
+
+
+/* =========================================================
+   FAQ ANSWER CONTENT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size → answer text size
+   line-height → line spacing
+   color → answer text color
+========================================================= */
+
+.faq-answer-content {
+
+  padding-bottom: 25px;
+
+  color: #cdebd8;
+
+  line-height: 1.8;
+
+  font-size: 1rem;
+}
+
+
+
+/* =========================================================
+   FAQ ACTIVE STATE
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   max-height → expanded height
+========================================================= */
+
+.faq-item.active .faq-answer {
+
+  max-height: 500px;
+
+  padding-top: 10px;
+}
+
+.faq-item.active .faq-icon {
+
+  transform: rotate(180deg);
+}
+
+
+
+/* =========================================================
+   FAQ SHOW MORE SECTION
+========================================================= */
+
+.faq-item.hidden-faq {
+  display: none;
+}
+
+
+/* =========================================================
+   SHOW MORE BUTTON WRAPPER
+========================================================= */
+
+.show-more-btn-wrap {
+
+  text-align: center;
+
+  margin-top: 40px;
+}
+
+
+
+/* =========================================================
+   SHOW MORE BUTTON
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   padding → button size
+   border color
+   text color
+   font-size
+========================================================= */
+
+.show-more-btn {
+
+  background: transparent;
+
+  border: 1px solid rgba(0,255,136,0.35);
+
+  color: #00ff88;
+
+  padding: 14px 34px;
+
+  border-radius: 50px;
+
+  font-family: 'Orbitron', sans-serif;
+
+  font-size: 0.9rem;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+
+
+/* =========================================================
+   SHOW MORE BUTTON HOVER
+========================================================= */
+
+.show-more-btn:hover {
+
+  background: rgba(0,255,136,0.08);
+
+  box-shadow:
+    0 0 15px rgba(0,255,136,0.2);
+}
+
+
+
+/* =========================================================
+   =========================================================
+                    FAQ SECTION END
+   =========================================================
+   ========================================================= */
+
+
+
+
+/* =========================================================
+   =========================================================
+                    FOOTER SECTION START
+   =========================================================
+   ========================================================= */
+
+
+/* =========================================================
+   FOOTER MAIN SECTION
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   background → footer color
+   padding → footer spacing
+========================================================= */
+
+.footer {
+
+  background: #020805;
+
+  border-top: 1px solid rgba(0,255,136,0.1);
+
+  padding: 70px 20px 25px;
+}
+
+
+
+/* =========================================================
+   FOOTER GRID CONTAINER
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   grid-template-columns → column widths
+   gap → space between columns
+========================================================= */
+
+.footer-container {
+
+  max-width: 1300px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr 1.2fr;
+
+  gap: 50px;
+}
+
+
+
+/* =========================================================
+   FOOTER LOGO
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size
+   color
+========================================================= */
+
+.footer-logo {
+
+  font-family: 'Orbitron', sans-serif;
+
+  font-size: 3rem;
+
+  color: #00ff88;
+
+  margin-bottom: 20px;
+}
+
+
+
+/* =========================================================
+   FOOTER HEADINGS
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   color
+   font-family
+========================================================= */
+
+.footer-links h3,
+.footer-contact h3,
+.footer-map h3 {
+
+  color: white;
+
+  margin-bottom: 20px;
+
+  font-family: 'Orbitron', sans-serif;
+}
+
+
+
+/* =========================================================
+   FOOTER QUICK LINKS
+========================================================= */
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links ul li {
+
+  margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   FOOTER QUICK LINK STYLE
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   color
+   hover color
+========================================================= */
+
+.footer-links ul li a {
+
+  color: #9fd7bb;
+
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+.footer-links ul li a:hover {
+
+  color: #00ff88;
+}
+
+
+
+/* =========================================================
+   FOOTER MAP
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   width
+   height
+   border-radius
+========================================================= */
+
+.footer-map iframe {
+
+  width: 100%;
+
+  height: 220px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.08);
+}
+
+
+
+/* =========================================================
+   FOOTER ADDRESS
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size
+   line-height
+   color
+========================================================= */
+
+.footer-address {
+
+  margin-top: 18px;
+
+  color: #b6d8c5;
+
+  line-height: 1.7;
+
+  font-size: 0.95rem;
+}
+
+
+
+/* =========================================================
+   FOOTER CONTACT INFO
+========================================================= */
+
+.footer-contact-left {
+
+  margin-top: 30px;
+}
+
+
+/* =========================================================
+   FOOTER CONTACT TEXT
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   text color
+   font-size
+========================================================= */
+
+.footer-contact-left p {
+
+  color: #b6d8c5;
+
+  margin-bottom: 14px;
+
+  font-size: 1rem;
+}
+
+
+
+/* =========================================================
+   FOOTER CONTACT LINKS
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   link color
+   hover color
+========================================================= */
+
+.footer-contact-left a {
+
+  color: #b6d8c5;
+
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+.footer-contact-left a:hover {
+
+  color: #00ff88;
+}
+
+
+
+/* =========================================================
+   FOOTER SOCIAL ICONS
+========================================================= */
+
+.footer-socials {
+
+  display: flex;
+
+  gap: 18px;
+
+  margin-top: 20px;
+}
+
+
+/* =========================================================
+   SOCIAL ICON IMAGE
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   width & height → icon size
+========================================================= */
+
+.footer-socials a img {
+
+  width: 34px;
+
+  height: 34px;
+
+  transition: 0.3s ease;
+
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,0.4));
+}
+
+
+
+/* =========================================================
+   SOCIAL ICON HOVER EFFECT
+========================================================= */
+
+.footer-socials a img:hover {
+
+  transform: scale(1.15);
+
+  filter:
+    drop-shadow(0 0 18px rgba(255,255,255,0.8));
+}
+
+
+
+/* =========================================================
+   FOOTER COPYRIGHT SECTION
+
+   WHAT YOU CAN CHANGE HERE?
+   -----------------------------------
+   font-size
+   color
+========================================================= */
+
+.footer-bottom {
+
+  text-align: center;
+
+  margin-top: 40px;
+
+  color: #6fa78f;
+
+  font-size: 0.9rem;
+
+  border-top: 1px solid rgba(255,255,255,0.05);
+
+  padding-top: 20px;
+}
+
+
+
+/* =========================================================
+   FOOTER RESPONSIVE DESIGN
+
+   FUNCTION:
+   Makes footer mobile responsive
+========================================================= */
+
+@media(max-width:900px) {
+
+  .footer-container {
+
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* =========================================================
+   =========================================================
+                    FOOTER SECTION END
+   =========================================================
+   ========================================================= */
+
   </style>
 </head>
 
@@ -1770,6 +2575,692 @@ section {
 </div><!-- /page -->
 
 
+<!-- =========================================================
+     =========================================================
+                        FAQ SECTION START
+     =========================================================
+     ========================================================= -->
+
+<section class="faq-section" id="faq">
+
+  <!-- =====================================================
+       FAQ SPOTLIGHT EFFECTS
+       Left & Right glowing white spotlight background
+  ====================================================== -->
+
+  <div class="faq-spotlight spotlight-left"></div>
+  <div class="faq-spotlight spotlight-right"></div>
+
+
+  <!-- =====================================================
+       FAQ TITLE
+       Change FAQ heading text from here
+  ====================================================== -->
+
+  <h1 class="faq-title">FAQs</h1>
+
+
+  <!-- =====================================================
+       FAQ CONTAINER START
+       All FAQ questions and answers are inside this section
+  ====================================================== -->
+
+  <div class="faq-container">
+
+
+    <!-- =====================================================
+         FAQ ITEM START
+         
+         HOW TO ADD MORE QUESTIONS?
+         Copy this complete faq-item block and paste below.
+
+         HOW TO CHANGE QUESTION?
+         Change text inside:
+         <button class="faq-question">
+
+         HOW TO CHANGE ANSWER?
+         Change text inside:
+         <div class="faq-answer-content">
+
+         HOW TO WRITE BULLET POINTS?
+         Use:
+         <ul>
+           <li>Point</li>
+         </ul>
+
+         IMPORTANT:
+         Only first 3 questions should NOT contain:
+         hidden-faq
+
+         All remaining questions should contain:
+         class="faq-item hidden-faq"
+
+    ====================================================== -->
+
+    <div class="faq-item">
+
+      <!-- FAQ QUESTION -->
+      <button class="faq-question">
+
+        Why should I join FusioniX?
+
+        <!-- PLUS / MINUS ICON -->
+        <span class="faq-icon">+</span>
+
+      </button>
+
+
+      <!-- FAQ ANSWER -->
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          <!-- BULLET POINT ANSWER -->
+          <ul>
+
+            <li>Get a chance to win from a ₹50,000 prize pool.</li>
+
+            <li>Gain exposure to integrated hardware and software systems, extending beyond conventional academic projects.</li>
+
+            <li>Engage in hands-on development by working on real-world challenges within a time-bound environment.</li>
+
+            <li>Collaborate with participants from diverse institutions and technical backgrounds.</li>
+
+            <li>Present your ideas and prototypes before a panel of evaluators.</li>
+
+            <li>The platform offers scope for professional visibility, with potential pathways toward internships and career opportunities for distinguished participants.</li>
+
+            <li>Promising solutions may attract further exploration, development, or real-world applicability beyond the duration of the hackathon.</li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FAQ ITEM 2
+    ====================================================== -->
+
+    <div class="faq-item">
+
+      <button class="faq-question">
+
+        Who can participate?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          Current students from IEM Newtown Campus and IEM Saltlake Campus are eligible to participate.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FAQ ITEM 3
+    ====================================================== -->
+
+    <div class="faq-item">
+
+      <button class="faq-question">
+
+        What is the maximum/minimum team size?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          Each team may consist of a minimum of 3 and a maximum of 4 participants.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HIDDEN FAQ ITEMS START
+
+         IMPORTANT:
+         These questions are hidden initially.
+         They appear after clicking:
+         "Show More"
+
+    ====================================================== -->
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Are cross-institutional teams between both campuses allowed?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          Yes. Teams may be formed with students from either of the two campuses.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Can I participate solo?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          We strongly encourage teamwork, solo participation will not be permitted.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        What is the participation fee?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          The registration fee for participation is 400 INR per team.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        What is the theme of this Hackathon?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          This hackathon focuses on the theme of sustainability, encouraging participants to develop innovative solutions that address environmental and social challenges for a better future.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Where will the grand finale be held?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          The grand finale will be hosted at:
+          University of Engineering and Management,
+          University Area, Action Area III,
+          Newtown, Kolkata – 700160.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Can I participate remotely?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          The idea submission round will be conducted online, allowing participants to take part remotely.
+          However, all subsequent rounds will be held offline, and participants must be physically present for them.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Are we allowed to leave the campus before the conclusion of the hackathon?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          No. Participants must remain on campus until the hackathon concludes.
+          Leaving early will result in disqualification,
+          as midway evaluations will take place.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        Will there be any food provided by the organising team?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          Lunch, snacks, and dinner will be provided to all participants by the organising team.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="faq-item hidden-faq">
+
+      <button class="faq-question">
+
+        If we have any queries, where should we reach out?
+
+        <span class="faq-icon">+</span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        <div class="faq-answer-content">
+
+          For any further queries, please contact the event leads using the phone numbers provided on the website.
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SHOW MORE BUTTON
+
+         FUNCTION:
+         Expands hidden FAQ questions.
+
+         BUTTON TEXT CAN BE CHANGED FROM HERE
+    ====================================================== -->
+
+    <div class="show-more-btn-wrap">
+
+      <button class="show-more-btn" id="showMoreFaqBtn">
+
+        Show More
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- FAQ CONTAINER END -->
+
+</section>
+
+<!-- =========================================================
+     =========================================================
+                        FAQ SECTION END
+     =========================================================
+     ========================================================= -->
+
+
+
+
+
+
+
+<!-- =========================================================
+     =========================================================
+                      FOOTER SECTION START
+     =========================================================
+     ========================================================= -->
+
+<footer class="footer" id="contact">
+
+
+  <!-- =====================================================
+       FOOTER MAIN CONTAINER
+       Contains all 3 footer columns
+  ====================================================== -->
+
+  <div class="footer-container">
+
+
+    <!-- =====================================================
+         FOOTER COLUMN 1
+         Logo + Tagline + Contact + Social Media
+    ====================================================== -->
+
+    <div>
+
+
+      <!-- =================================================
+           FOOTER LOGO
+           Change footer logo text from here
+      ================================================== -->
+
+      <div class="footer-logo">FusioniX</div>
+
+
+      <!-- =================================================
+           FOOTER TAGLINE
+           Change footer description/tagline from here
+      ================================================== -->
+
+      <p style="color:#9fd7bb; line-height:1.8;">
+
+        The Ultimate Sustainable Tech & IoT
+        Innovation Hackathon organized by ECE &
+        CSE(IoT), UEM Kolkata.
+
+      </p>
+
+
+
+      <!-- =================================================
+           FOOTER CONTACT SECTION
+           Phone + Email + Social Media
+      ================================================== -->
+
+      <div class="footer-contact-left">
+
+
+        <!-- =============================================
+             PHONE NUMBER
+
+             HOW TO CHANGE PHONE NUMBER?
+             Change both:
+             href="tel:+91XXXXXXXXXX"
+             AND visible number text
+        ============================================== -->
+
+        <p>
+
+          📞
+
+          <a href="tel:+917063194265">
+
+            +91 70631 94265
+
+          </a>
+
+        </p>
+
+
+
+        <!-- =============================================
+             EMAIL ADDRESS
+
+             HOW TO CHANGE EMAIL?
+             Change both:
+             href="mailto:yourmail@gmail.com"
+             AND visible email text
+        ============================================== -->
+
+        <p>
+
+          📧
+
+          <a href="mailto:fusionix2026@gmail.com">
+
+            fusionix2026@gmail.com
+
+          </a>
+
+        </p>
+
+
+
+        <!-- =============================================
+             SOCIAL MEDIA LINKS
+
+             HOW TO CHANGE SOCIAL LINKS?
+             Replace:
+             YOUR_INSTAGRAM_LINK
+             YOUR_LINKEDIN_LINK
+
+             With actual links.
+        ============================================== -->
+
+        <div class="footer-socials">
+
+          <!-- INSTAGRAM -->
+          <a href="YOUR_INSTAGRAM_LINK" target="_blank">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+
+          </a>
+
+
+          <!-- LINKEDIN -->
+          <a href="YOUR_LINKEDIN_LINK" target="_blank">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png">
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER COLUMN 2
+         QUICK LINKS SECTION
+    ====================================================== -->
+
+    <div class="footer-links">
+
+      <h3>Quick Links</h3>
+
+
+      <!-- =============================================
+           QUICK LINKS LIST
+
+           HOW TO CHANGE LINKS?
+           Change:
+           href="#sectionID"
+
+           HOW TO CHANGE TEXT?
+           Change visible text between <a>...</a>
+      ============================================== -->
+
+      <ul>
+
+        <li><a href="#home">Home</a></li>
+
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#timeline">Timeline</a></li>
+
+        <li><a href="#teams">Teams</a></li>
+
+        <li><a href="#sponsors">Sponsors</a></li>
+
+        <li><a href="#faq">FAQ's</a></li>
+
+      </ul>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER COLUMN 3
+         GOOGLE MAP + ADDRESS
+    ====================================================== -->
+
+    <div class="footer-map">
+
+
+      <!-- =============================================
+           MAP TITLE
+      ============================================== -->
+
+      <h3>UEM Kolkata Location</h3>
+
+
+
+      <!-- =============================================
+           GOOGLE MAP EMBED
+
+           HOW TO CHANGE LOCATION?
+           Replace the Google Maps embed link
+           inside src=""
+      ============================================== -->
+
+      <iframe
+        src="https://maps.google.com/maps?q=University%20of%20Engineering%20and%20Management%20Kolkata&t=&z=13&ie=UTF8&iwloc=&output=embed">
+      </iframe>
+
+
+
+      <!-- =============================================
+           FOOTER ADDRESS
+
+           HOW TO CHANGE ADDRESS?
+           Change text below.
+
+           HOW TO BREAK LINE?
+           Use:
+           <br>
+      ============================================== -->
+
+      <p class="footer-address">
+
+        📍 University of Engineering & Management,<br>
+
+        AA-III/B, University Area, New Town, Kolkata,<br>
+
+        West Bengal, 700160
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       FOOTER COPYRIGHT
+       Change copyright text from here
+  ====================================================== -->
+
+  <div class="footer-bottom">
+
+    FUSIONIX 2026. ALL RIGHTS RESERVED
+
+  </div>
+
+</footer>
+
+<!-- =========================================================
+     =========================================================
+                      FOOTER SECTION END
+     =========================================================
+     ========================================================= -->
+
 
 </body>
   </section>
@@ -2187,6 +3678,213 @@ window.addEventListener("click", (e) => {
     formPopup.style.display = "none";
   }
 });
+
+/* =========================================================
+   =========================================================
+                    FAQ JAVASCRIPT START
+   =========================================================
+   ========================================================= */
+
+
+
+/* =========================================================
+   FAQ ACCORDION FUNCTIONALITY
+
+   FUNCTION:
+   Opens and closes FAQ answers.
+
+   HOW IT WORKS?
+   - Click question → answer expands
+   - Click again → answer collapses
+   - Plus (+) changes to Minus (−)
+
+   IMPORTANT:
+   Do NOT change class names unless
+   you also update HTML/CSS.
+========================================================= */
+
+
+/* =========================================================
+   SELECT ALL FAQ ITEMS
+========================================================= */
+
+const faqItems = document.querySelectorAll('.faq-item');
+
+
+
+/* =========================================================
+   LOOP THROUGH EACH FAQ ITEM
+========================================================= */
+
+faqItems.forEach(item => {
+
+
+  /* =====================================================
+     SELECT QUESTION BUTTON
+  ====================================================== */
+
+  const btn = item.querySelector('.faq-question');
+
+
+  /* =====================================================
+     SELECT PLUS / MINUS ICON
+  ====================================================== */
+
+  const icon = item.querySelector('.faq-icon');
+
+
+
+  /* =====================================================
+     CLICK EVENT ON QUESTION
+  ====================================================== */
+
+  btn.addEventListener('click', () => {
+
+
+    /* =================================================
+       CHECK:
+       Is FAQ already open?
+    ================================================== */
+
+    const isActive = item.classList.contains('active');
+
+
+
+    /* =================================================
+       IF FAQ IS OPEN → CLOSE IT
+    ================================================== */
+
+    if(isActive) {
+
+      /* Remove active class */
+      item.classList.remove('active');
+
+      /* Change icon back to + */
+      icon.textContent = '+';
+
+    }
+
+
+
+    /* =================================================
+       IF FAQ IS CLOSED → OPEN IT
+    ================================================== */
+
+    else {
+
+      /* Add active class */
+      item.classList.add('active');
+
+      /* Change icon to minus */
+      icon.textContent = '−';
+
+    }
+
+  });
+
+});
+
+
+
+
+/* =========================================================
+   FAQ SHOW MORE BUTTON
+
+   FUNCTION:
+   Initially hides extra FAQ questions.
+
+   On button click:
+   - Hidden FAQs become visible
+   - Button text changes:
+     Show More ↔ Show Less
+
+   IMPORTANT:
+   Hidden FAQs must contain:
+   class="hidden-faq"
+========================================================= */
+
+
+/* =========================================================
+   SELECT SHOW MORE BUTTON
+========================================================= */
+
+const showMoreBtn = document.getElementById('showMoreFaqBtn');
+
+
+
+/* =========================================================
+   SELECT ALL HIDDEN FAQ ITEMS
+========================================================= */
+
+const hiddenFaqs = document.querySelectorAll('.hidden-faq');
+
+
+
+/* =========================================================
+   FAQ EXPAND/COLLAPSE STATE
+========================================================= */
+
+let faqExpanded = false;
+
+
+
+/* =========================================================
+   SHOW MORE BUTTON CLICK EVENT
+========================================================= */
+
+showMoreBtn.addEventListener('click', () => {
+
+
+  /* =====================================================
+     TOGGLE FAQ STATE
+     false → true
+     true → false
+  ====================================================== */
+
+  faqExpanded = !faqExpanded;
+
+
+
+  /* =====================================================
+     LOOP THROUGH HIDDEN FAQ ITEMS
+  ====================================================== */
+
+  hiddenFaqs.forEach(item => {
+
+
+    /* =================================================
+       SHOW OR HIDE FAQ ITEMS
+    ================================================== */
+
+    item.style.display = faqExpanded
+      ? 'block'
+      : 'none';
+
+  });
+
+
+
+  /* =====================================================
+     CHANGE BUTTON TEXT
+  ====================================================== */
+
+  showMoreBtn.textContent =
+
+    faqExpanded
+
+    ? 'Show Less'
+
+    : 'Show More';
+
+});
+
+
+
+/* =========================================================
+   =========================================================
+                    FAQ JAVASCRIPT END
+   =========================================================
+   ========================================================= */
 
 
   </script>
