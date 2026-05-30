@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FusioniX - The Ultimate Sustech Hackathon</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* --- General Reset & Styling Core --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --matrix-green: #00FF66;
+      --matrix-glow: rgba(0, 255, 102, 0.4);
+      --dark-bg: #030c08;
+      --panel-bg: rgba(0, 15, 5, 0.75);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--dark-bg);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* --- Hero Section & Canvas Setup --- */
+    .hero-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #canvas3d {
+      z-index: 1;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #matrixCanvas {
+      z-index: 0;
+      opacity: 0.45;
+      pointer-events: none;
+      position: fixed; /* Keeps matrix background visible when scrolling */
+    }
+
+    /* --- Navigation Bar Layout --- */
+    header {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      width: calc(100% - 40px);
+      max-width: 1100px;
+      border: 1px solid var(--matrix-green);
+      border-radius: 50px;
+      padding: 10px 30px;
+      background-color: rgba(0, 10, 5, 0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 80px;
+      list-style: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--matrix-green);
+      text-shadow: 0 0 8px var(--matrix-green);
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      border: 2px solid var(--matrix-green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px var(--matrix-green);
+      background-color: #000;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    /* --- Main Hero Content Grid --- */
+    .hero-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1400px;
+      margin-top: 140px;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 20px;
+      padding: 20px;
+      pointer-events: none; /* Let spline canvas be interactable */
+    }
+
+    .hero-container > * {
+      pointer-events: auto; /* Re-enable clicks for UI elements */
+    }
+
+    .left-panel {
+      flex: 1;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .center-panel {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 20px;
+      min-height: 500px;
+    }
+
+    .right-panel {
+      flex: 1;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    /* --- Left side Sci-Fi Card --- */
+    .sci-fi-box {
+      position: relative;
+      background: var(--panel-bg);
+      border: 1px solid var(--matrix-green);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.1), 0 0 15px rgba(0, 255, 102, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    .sci-fi-box::before,
+    .sci-fi-box::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--matrix-green);
+    }
+
+    .sci-fi-box::before {
+      top: -2px;
+      left: -2px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .sci-fi-box::after {
+      bottom: -2px;
+      right: -2px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .tagline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+
+    .sci-fi-box h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      color: #fff;
+      line-height: 1.4;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .text-glow {
+      color: var(--matrix-green);
+      font-weight: 700;
+      text-shadow: 0 0 15px var(--matrix-glow);
+    }
+
+    .subtitle {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #b3b3b3;
+      line-height: 1.6;
+    }
+
+    /* --- Right side Perks Badges --- */
+    .perk-badge {
+      display: flex;
+      align-items: center;
+      background: var(--panel-bg);
+      border: 1px solid var(--matrix-green);
+      padding: 15px 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: #ffffff;
+      box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.1), 0 0 10px rgba(0, 255, 102, 0.2);
+      clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .perk-badge:hover {
+      transform: translateX(-10px);
+      box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.3), 0 0 20px rgba(0, 255, 102, 0.5);
+    }
+
+    .perk-icon {
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 5px var(--matrix-green));
+    }
+
+    /* --- Center Hero Action Button --- */
+    .register-btn-glow {
+      background: var(--panel-bg);
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 18px 50px;
+      border: 1px solid var(--matrix-green);
+      cursor: pointer;
+      box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.2), 0 0 15px rgba(0, 255, 102, 0.4);
+      clip-path: polygon(25px 0, 100% 0, 100% calc(100% - 25px), calc(100% - 25px) 100%, 0 100%, 0 25px);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      backdrop-filter: blur(5px);
+    }
+
+    .register-btn-glow:hover {
+      /* background: var(--matrix-green); */
+      background:rgb(0, 208, 255) ;
+      color: #000;
+      box-shadow: 0 0 30px var(--matrix-green);
+    }
+
+    /* --- About Us Section --- */
+    .about-section {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      padding: 100px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid rgba(0, 255, 102, 0.1);
+      background: linear-gradient(180deg, transparent, rgba(0, 15, 5, 0.9) 100%);
+    }
+
+    .about-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 60px;
+      letter-spacing: 2px;
+      text-align: center;
+      text-shadow: 0 0 20px var(--matrix-glow);
+    }
+
+    .card-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
+
+    .border-glow-container {
+      grid-column: 1;
+      grid-row: 1;
+      background: var(--matrix-green);
+      padding: 2px; /* acts as a border thickness */
+      box-shadow: 0 0 20px var(--matrix-glow);
+      border-radius: 35px;
+      clip-path: url(#custom-curve-clip);
+    }
+
+    .about-card-body {
+      clip-path: url(#custom-curve-clip);
+      background: var(--panel-bg);
+      padding: 55px 180px 55px 50px;
+      border-radius: 33px;
+      color: #d1e2dc;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      font-weight: 400;
+      text-align: left;
+      backdrop-filter: blur(10px);
+    }
+
+    .about-card-body p {
+      width: 85%;
+    }
+
+    .know-more-btn {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: end;
+      margin-right: -20px;
+      z-index: 10;
+      background: var(--dark-bg);
+      border: 2px solid var(--matrix-green);
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 18px 32px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2), 0 0 20px rgba(0, 255, 102, 0.4);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .know-more-btn:hover {
+      background: var(--matrix-green);
+      color: #030c08;
+      box-shadow: 0 0 30px var(--matrix-green);
+    }
+
+    /* --- Layout Responsiveness Breakpoints --- */
+    @media (max-width: 1100px) {
+      .hero-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+      }
+      
+      .left-panel, .right-panel {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .center-panel {
+        height: 350px; 
+      }
+      
+      .about-card-body {
+        padding: 40px 100px 40px 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Nav Bar Adjustments */
+      header {
+        width: 95%;
+        padding: 10px 15px;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+      }
+
+      .logo {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      header {
+        justify-content: space-between;
+      }
+
+      /* Hero Content Adjustments */
+      .hero-container {
+        margin-top: 420px;
+      }
+
+      .sci-fi-box {
+        padding: 25px;
+      }
+
+      .sci-fi-box h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      .perk-badge {
+        font-size: 1rem;
+        padding: 12px 20px;
+      }
+
+      .center-panel {
+        min-height: 250px; 
+      }
+      
+      .register-btn-glow {
+        padding: 15px 35px;
+        font-size: 1.2rem;
+      }
+
+      /* About Section Adjustments */
+      .about-section {
+        padding: 60px 15px;
+      }
+
+      .about-title {
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+      }
+
+      .card-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      /* Remove complex clip paths on mobile to prevent squishing bugs */
+      .border-glow-container {
+        clip-path: none;
+        border-radius: 20px;
+      }
+
+      .about-card-body {
+        clip-path: none;
+        padding: 30px;
+        border-radius: 18px;
+      }
+
+      .about-card-body p {
+        width: 100%;
+        font-size: 1rem;
+        text-align: justify;
+      }
+
+      .know-more-btn {
+        margin-right: 0;
+        justify-self: center;
+        align-self: center;
+      }
+    }
+
+    /* --- Mobile Menu Drawer --- */
+    .menu-toggle {
+      display: inline-flex;
+      border: 1px solid rgba(0, 255, 102, 0.4);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      cursor: pointer;
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      border-radius: 50%;
+      position: relative;
+      z-index: 10001;
+      transition: background 0.2s ease, transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(0, 255, 102, 0.1);
+    }
+
+    .menu-toggle .bar {
+      width: 24px;
+      height: 3px;
+      background: var(--matrix-green);
+      display: block;
+      margin: 0;
+      border-radius: 999px;
+      box-shadow: 0 0 8px rgba(0, 255, 102, 0.85);
+      transition: transform 0.2s ease;
+    }
+    .mobile-h{
+      display: inline;
+    }
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
+      .mobile-h{
+        display: none;
+      }
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 280px;
+      height: 100%;
+      background: rgba(0, 10, 5, 0.98);
+      box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 20000;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: left 0.35s ease;
+    }
+
+    .mobile-drawer.open {
+      left: 0;
+    }
+
+    .mobile-drawer .drawer-close {
+      align-self: flex-end;
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-drawer nav {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .mobile-drawer nav a {
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.25s ease;
+    }
+
+    .mobile-drawer nav a:hover {
+      color: var(--matrix-green);
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 19000;
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <clipPath id="custom-curve-clip" clipPathUnits="objectBoundingBox">
+        <path d="M 0.03,0 
+                 L 0.85,0 
+                 A 0.03 0.03 0 0 1 0.88 0.02
+                 C 0.88 0.15, 0.75 0.35, 0.75 0.5
+                 C 0.75 0.65, 0.88 0.85, 0.88 0.98
+                 A 0.03 0.03 0 0 1 0.85 1
+                 L 0.03,1 
+                 A 0.03 0.03 0 0 1 0,0.95 
+                 L 0,0.05 
+                 A 0.03 0.03 0 0 1 0.03,0 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <canvas id="canvas3d"></canvas>
+  <canvas id="matrixCanvas"></canvas>
+
+  <header>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+    </ul>
+    <div class="logo">
+      <img src="image/logo.png" alt="logo" onerror="this.style.display='none'">
+    </div>
+    <h2  class="mobile-h">FUSIONIX</h2>
+    <ul class="nav-links">
+      <li><a href="#teams">Teams</a></li>
+      <li><a href="#sponsors">Sponsors</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open mobile menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </header>
+
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <button class="drawer-close" id="drawerClose" aria-label="Close mobile menu">×</button>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#teams">Teams</a>
+      <a href="#sponsors">Sponsors</a>
+      <a href="#contact">Contact Us</a>
+    </nav>
+  </div>
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <section class="hero-section" id="home">
+    <div class="hero-container">
+      
+      <div class="left-panel">
+        <div class="sci-fi-box">
+          <div class="tagline">INNOVATE &bull; BUILD &bull; SUSTAIN</div>
+          <h1>THE ULTIMATE<br>
+            <span class="text-glow">SUSTAINABLE<br> ECE & IOT</span><br>
+            INNOVATION<br>
+            <span class="text-glow">HACKATHON</span>
+          </h1>
+          <p class="subtitle">Build solutions for a smarter, greener<br>and more connected tomorrow.</p>
+        </div>
+      </div>
+
+      <div class="center-panel">
+        <button class="register-btn-glow">REGISTER NOW!!</button>
+      </div>
+
+      <div class="right-panel">
+        <div class="perk-badge">
+          <div class="perk-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </div>
+          50K Prize Pool
+        </div>
+        
+        <div class="perk-badge">
+          <div class="perk-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          24Hr Hackathon
+        </div>
+        
+        <div class="perk-badge">
+          <div class="perk-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          Org. By ECE & CSE(IoT)
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <h1 class="about-title">ABOUT <span class="text-glow">US</span></h1>
+
+    <div class="card-wrapper">
+      <div class="border-glow-container">
+        <div class="about-card-body">
+          <p>FusioniX is a 24-hour hackathon by the Departments of ECE and CSE (IoT) at the University of Engineering &
+            Management, where participants transform ideas into real-world solutions through integrated hardware and
+            software innovation. With no fixed domain—spanning intelligent systems, environmental monitoring, industrial
+            safety, and beyond—teams ideate, design, and prototype across multiple competitive rounds. Judged on
+            creativity and real-world impact, top performers win prizes and cash rewards alongside valuable feedback
+            from industry experts. Full meals provided. At FusioniX, innovation is expected. Ideas become solutions.</p>
+        </div>
+      </div>
+      <button class="know-more-btn">Want to Know More??</button>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    const matrixCanvas = document.getElementById('matrixCanvas');
+    const ctx = matrixCanvas.getContext('2d');
+
+    const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=_";
+    const fontSize = 16;
+    let columns = 0;
+    let rainDrops = [];
+
+    function initRain() {
+      rainDrops = [];
+      for (let x = 0; x < columns; x++) {
+        rainDrops[x] = 1;
+      }
+    }
+
+    function resizeCanvas() {
+      matrixCanvas.width = window.innerWidth;
+      matrixCanvas.height = window.innerHeight;
+      columns = Math.floor(matrixCanvas.width / fontSize);
+      initRain();
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerClose = document.getElementById('drawerClose');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+
+    function openDrawer() {
+      mobileDrawer.classList.add('open');
+      drawerOverlay.classList.add('open');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeDrawer() {
+      mobileDrawer.classList.remove('open');
+      drawerOverlay.classList.remove('open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+    }
+
+    menuToggle?.addEventListener('click', openDrawer);
+    drawerClose?.addEventListener('click', closeDrawer);
+    drawerOverlay?.addEventListener('click', closeDrawer);
+    mobileDrawer?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(3, 12, 8, 0.15)';
+      ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+      ctx.fillStyle = '#00FF66';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < rainDrops.length; i++) {
+        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+        if (rainDrops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+          rainDrops[i] = 0;
+        }
+        rainDrops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+  </script>
+
+  <script type="module">
+    import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.89/build/runtime.js';
+
+    const splineCanvas = document.getElementById('canvas3d');
+    const app = new Application(splineCanvas);
+
+    app.load('https://prod.spline.design/60rcxftHjrZq554K/scene.splinecode').then(() => {
+        const robot = app.findObjectByName('Robot');
+        if (!robot) {
+          console.error('Spline object "Robot" not found.');
+          return;
+        }
+
+        function updateRobotPosition(){
+            // Keep it perfectly centered relative to the screen on all devices
+            robot.position.x = 0;
+            robot.position.y = 0; 
+        }
+
+        updateRobotPosition();
+        window.addEventListener('resize', updateRobotPosition);
+    });
+  </script>
+
+</body>
+</html>
