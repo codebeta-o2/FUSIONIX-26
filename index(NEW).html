@@ -9,69 +9,108 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap"
     rel="stylesheet">
 
   <style>
-    /* --- General Reset & Styling Core --- */
-    * {
+    /* ═══════════════════════════════════════════════
+       DESIGN TOKENS (single :root, no duplication)
+    ═══════════════════════════════════════════════ */
+    :root {
+      /* Brand colours */
+      --matrix-green:   #00FF66;
+      --matrix-glow:    rgba(0, 255, 102, 0.4);
+      --dark-bg:        #030c08;
+      --panel-bg:       rgba(0, 15, 5, 0.75);
+
+      /* Extended palette for timeline / rules */
+      --neon-green:   #00ff88;
+      --neon-cyan:    #00ccff;
+      --neon-lime:    #7fff00;
+      --neon-dim:     rgba(0, 255, 136, 0.2);
+      --text-primary: #d4ffe8;
+      --text-muted:   #7fa893;
+
+      /* Font stacks */
+      --font-display: 'Orbitron', monospace;
+      --font-ui:      'Rajdhani', sans-serif;
+      --font-body:    'Plus Jakarta Sans', 'Exo 2', sans-serif;
+
+      /* Spacing scale */
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 48px;
+      --space-xl: 80px;
+
+      /* Fluid section padding */
+      --section-px: clamp(16px, 5vw, 40px);
+      --section-py: clamp(40px, 6vw, 80px);
+
+      /* Transitions */
+      --ease: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════════════════════════════════════
+       SINGLE RESET (no duplicates)
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    :root {
-      --matrix-green: #00FF66;
-      --matrix-glow: rgba(0, 255, 102, 0.4);
-      --dark-bg: #030c08;
-      --panel-bg: rgba(0, 15, 5, 0.75);
-    }
-
+    /* ═══════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════ */
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--font-body);
       background-color: var(--dark-bg);
       color: #ffffff;
       overflow-x: hidden;
-    }
-
-    /* --- Hero Section & Canvas Setup --- */
-    .hero-section {
-      position: relative;
-      width: 100%;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 20px;
+      padding-left:  env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
     }
 
-    canvas {
+    /* ═══════════════════════════════════════════════
+       MATRIX BACKGROUND CANVAS
+       Fixed, full-screen, lowest z-index, non-interactive
+    ═══════════════════════════════════════════════ */
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SPLINE 3-D CANVAS
+       Absolute inside hero, pointer-events only on itself,
+       so it never blocks nav / text / buttons.
+    ═══════════════════════════════════════════════ */
+    #canvas3d {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-    }
-
-    #canvas3d {
       z-index: 1;
-      opacity: 1;
       pointer-events: auto;
     }
 
-    #matrixCanvas {
-      z-index: 0;
-      opacity: 0.45;
-      pointer-events: none;
-      position: fixed; /* Keeps matrix background visible when scrolling */
-    }
-
-    /* --- Navigation Bar Layout --- */
+    /* ═══════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════ */
     header {
       position: fixed;
       top: 15px;
@@ -95,21 +134,21 @@
 
     .nav-links {
       display: flex;
-      gap: 80px;
+      gap: 90px;
       list-style: none;
       align-items: center;
       justify-content: center;
     }
 
     .nav-links a {
-      font-family: 'Rajdhani', sans-serif;
+      font-family: var(--font-ui);
       color: #ffffff;
       text-decoration: none;
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-transform: uppercase;
       font-weight: 600;
       letter-spacing: 2px;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     .nav-links a:hover {
@@ -128,6 +167,7 @@
       box-shadow: 0 0 10px var(--matrix-green);
       background-color: #000;
       flex-shrink: 0;
+      overflow: hidden;
     }
 
     .logo img {
@@ -136,7 +176,130 @@
       object-fit: contain;
     }
 
-    /* --- Main Hero Content Grid --- */
+    /* Mobile title shown only on small screens */
+    .mobile-brand {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--matrix-green);
+      letter-spacing: 2px;
+      display: none;
+    }
+
+    /* ═══════════════════════════════════════════════
+       HAMBURGER TOGGLE
+    ═══════════════════════════════════════════════ */
+    .menu-toggle {
+      display: none;   /* hidden on desktop */
+      border: 1px solid rgba(0, 255, 102, 0.4);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      cursor: pointer;
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      border-radius: 50%;
+      z-index: 10001;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .menu-toggle:hover { background: rgba(0, 255, 102, 0.1); }
+
+    .menu-toggle .bar {
+      width: 24px;
+      height: 3px;
+      background: var(--matrix-green);
+      display: block;
+      border-radius: 999px;
+      box-shadow: 0 0 8px rgba(0, 255, 102, 0.85);
+    }
+
+    /* ═══════════════════════════════════════════════
+       MOBILE DRAWER
+    ═══════════════════════════════════════════════ */
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 280px;
+      height: 100%;
+      background: rgba(0, 10, 5, 0.98);
+      box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 20000;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: left 0.35s ease;
+    }
+
+    .mobile-drawer.open { left: 0; }
+
+    .drawer-close {
+      align-self: flex-end;
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-drawer nav {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .mobile-drawer nav a {
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-ui);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.25s ease;
+    }
+
+    .mobile-drawer nav a:hover { color: var(--matrix-green); }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 19000;
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ═══════════════════════════════════════════════
+       HERO SECTION
+    ═══════════════════════════════════════════════ */
+    .hero-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+      /* Allow Spline canvas to sit behind UI */
+      overflow: hidden;
+    }
+
+    /* UI content sits above the Spline canvas */
     .hero-container {
       position: relative;
       z-index: 10;
@@ -148,12 +311,12 @@
       align-items: stretch;
       gap: 20px;
       padding: 20px;
-      pointer-events: none; /* Let spline canvas be interactable */
+      /* pointer-events: none on container so Spline stays interactive;
+         re-enable on each child */
+      pointer-events: none;
     }
 
-    .hero-container > * {
-      pointer-events: auto; /* Re-enable clicks for UI elements */
-    }
+    .hero-container > * { pointer-events: auto; }
 
     .left-panel {
       flex: 1;
@@ -181,17 +344,20 @@
       gap: 25px;
     }
 
-    /* --- Left side Sci-Fi Card --- */
+    /* ─── Sci-Fi card ──────────────────────────────── */
     .sci-fi-box {
       position: relative;
       background: var(--panel-bg);
       border: 1px solid var(--matrix-green);
       padding: 40px;
       border-radius: 10px;
-      box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.1), 0 0 15px rgba(0, 255, 102, 0.2);
+      box-shadow:
+        inset 0 0 20px rgba(0, 255, 102, 0.1),
+        0 0 15px rgba(0, 255, 102, 0.2);
       backdrop-filter: blur(5px);
     }
 
+    /* Corner accents via pseudo-elements */
     .sci-fi-box::before,
     .sci-fi-box::after {
       content: '';
@@ -202,21 +368,17 @@
     }
 
     .sci-fi-box::before {
-      top: -2px;
-      left: -2px;
-      border-right: none;
-      border-bottom: none;
+      top: -2px; left: -2px;
+      border-right: none; border-bottom: none;
     }
 
     .sci-fi-box::after {
-      bottom: -2px;
-      right: -2px;
-      border-left: none;
-      border-top: none;
+      bottom: -2px; right: -2px;
+      border-left: none; border-top: none;
     }
 
     .tagline {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.85rem;
       letter-spacing: 2px;
       color: #fff;
@@ -227,7 +389,7 @@
     }
 
     .sci-fi-box h1 {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 2.2rem;
       color: #fff;
       line-height: 1.4;
@@ -248,17 +410,19 @@
       line-height: 1.6;
     }
 
-    /* --- Right side Perks Badges --- */
+    /* ─── Perk badges ──────────────────────────────── */
     .perk-badge {
       display: flex;
       align-items: center;
       background: var(--panel-bg);
       border: 1px solid var(--matrix-green);
       padding: 15px 25px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
       color: #ffffff;
-      box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.1), 0 0 10px rgba(0, 255, 102, 0.2);
+      box-shadow:
+        inset 0 0 15px rgba(0, 255, 102, 0.1),
+        0 0 10px rgba(0, 255, 102, 0.2);
       clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       backdrop-filter: blur(5px);
@@ -266,7 +430,9 @@
 
     .perk-badge:hover {
       transform: translateX(-10px);
-      box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.3), 0 0 20px rgba(0, 255, 102, 0.5);
+      box-shadow:
+        inset 0 0 20px rgba(0, 255, 102, 0.3),
+        0 0 20px rgba(0, 255, 102, 0.5);
     }
 
     .perk-icon {
@@ -275,19 +441,22 @@
       align-items: center;
       justify-content: center;
       filter: drop-shadow(0 0 5px var(--matrix-green));
+      flex-shrink: 0;
     }
 
-    /* --- Center Hero Action Button --- */
+    /* ─── Register button ─────────────────────────── */
     .register-btn-glow {
       background: var(--panel-bg);
       color: #ffffff;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.4rem;
       font-weight: 700;
       padding: 18px 50px;
       border: 1px solid var(--matrix-green);
       cursor: pointer;
-      box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.2), 0 0 15px rgba(0, 255, 102, 0.4);
+      box-shadow:
+        inset 0 0 15px rgba(0, 255, 102, 0.2),
+        0 0 15px rgba(0, 255, 102, 0.4);
       clip-path: polygon(25px 0, 100% 0, 100% calc(100% - 25px), calc(100% - 25px) 100%, 0 100%, 0 25px);
       transition: all 0.3s ease;
       text-transform: uppercase;
@@ -296,13 +465,14 @@
     }
 
     .register-btn-glow:hover {
-      /* background: var(--matrix-green); */
-      background:rgb(0, 208, 255) ;
+      background: rgb(0, 208, 255);
       color: #000;
       box-shadow: 0 0 30px var(--matrix-green);
     }
 
-    /* --- About Us Section --- */
+    /* ═══════════════════════════════════════════════
+       ABOUT SECTION
+    ═══════════════════════════════════════════════ */
     .about-section {
       position: relative;
       z-index: 10;
@@ -312,11 +482,11 @@
       flex-direction: column;
       align-items: center;
       border-top: 1px solid rgba(0, 255, 102, 0.1);
-      background: linear-gradient(180deg, transparent, rgba(0, 15, 5, 0.9) 100%);
+      background: linear-gradient(180deg, transparent, rgba(0, 15, 5, 0.9));
     }
 
     .about-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 4rem;
       font-weight: 700;
       color: #fff;
@@ -326,6 +496,7 @@
       text-shadow: 0 0 20px var(--matrix-glow);
     }
 
+    /* SVG clip-path defined inline in the HTML */
     .card-wrapper {
       position: relative;
       width: 100%;
@@ -339,7 +510,7 @@
       grid-column: 1;
       grid-row: 1;
       background: var(--matrix-green);
-      padding: 2px; /* acts as a border thickness */
+      padding: 2px;
       box-shadow: 0 0 20px var(--matrix-glow);
       border-radius: 35px;
       clip-path: url(#custom-curve-clip);
@@ -358,9 +529,7 @@
       backdrop-filter: blur(10px);
     }
 
-    .about-card-body p {
-      width: 85%;
-    }
+    .about-card-body p { width: 85%; }
 
     .know-more-btn {
       grid-column: 1;
@@ -371,13 +540,15 @@
       background: var(--dark-bg);
       border: 2px solid var(--matrix-green);
       color: #ffffff;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.9rem;
       font-weight: 700;
       padding: 18px 32px;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2), 0 0 20px rgba(0, 255, 102, 0.4);
+      box-shadow:
+        inset 0 0 10px rgba(0, 255, 102, 0.2),
+        0 0 20px rgba(0, 255, 102, 0.4);
       transition: all 0.3s ease;
       white-space: nowrap;
       text-transform: uppercase;
@@ -390,99 +561,521 @@
       box-shadow: 0 0 30px var(--matrix-green);
     }
 
-    /* --- Layout Responsiveness Breakpoints --- */
+    /* ═══════════════════════════════════════════════
+       TIMELINE SECTION
+    ═══════════════════════════════════════════════ */
+    .timeline-section,
+    .rules-section {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--section-py) var(--section-px);
+    }
+
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 6vw, 4.5rem);
+      font-weight: 600;
+      color: var(--neon-green);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      word-break: break-word;
+      text-shadow:
+        0 0 7px  var(--neon-green),
+        0 0 25px var(--neon-green),
+        0 0 60px var(--neon-green),
+        0 0 60px rgba(102, 221, 166, 0.33);
+      animation: titlePulse 4s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% {
+        text-shadow:
+          0 0 10px  var(--neon-green),
+          0 0 30px  var(--neon-green),
+          0 0 70px  var(--neon-green),
+          0 0 120px rgba(0, 255, 136, 0.33);
+      }
+      50% {
+        text-shadow:
+          0 0 6px   var(--neon-green),
+          0 0 20px  var(--neon-green),
+          0 0 50px  var(--neon-green),
+          0 0 90px  rgba(0, 255, 136, 0.13);
+      }
+    }
+
+    .title-underline {
+      width: clamp(60px, 30vw, 120px);
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+      margin: 12px auto 0;
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+
+    /* ─── Road wrapper ────────────────────────────── */
+    .road-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      transform: scale(0.82);
+      transform-origin: top center;
+    }
+
+    .road-wrapper svg {
+      width: 100%;
+      height: 900px;
+      overflow: visible;
+      display: block;
+    }
+
+    /* Road fill/stroke */
+    .road {
+      fill: none;
+      stroke: #071716;
+      stroke-width: 90;
+      stroke-linecap: round;
+      animation: roadGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes roadGlow {
+      from {
+        filter:
+          drop-shadow(0 0  8px rgba(255,255,255,0.08))
+          drop-shadow(0 0 18px rgba(255,255,255,0.05));
+      }
+      to {
+        filter:
+          drop-shadow(0 0 20px rgba(255,255,255,0.18))
+          drop-shadow(0 0 40px rgba(255,255,255,0.10));
+      }
+    }
+
+    .road-border {
+      fill: none;
+      stroke: rgb(68,18,18);
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+
+    .road-line {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 25 18;
+      stroke-dashoffset: 0;
+      shape-rendering: geometricPrecision;
+      will-change: stroke-dashoffset;
+      animation: moveRoad 2s linear infinite;
+    }
+
+    @keyframes moveRoad {
+      from { stroke-dashoffset: 0; }
+      to   { stroke-dashoffset: -86; }
+    }
+
+    /* ─── Timeline cards ──────────────────────────── */
+    .card {
+      position: absolute;
+      width: 260px;
+    }
+
+    .card h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      line-height: 1.2;
+      font-family: var(--font-display);
+    }
+
+    .card p {
+      font-size: 15px;
+      line-height: 1.7;
+      font-family: var(--font-body);
+    }
+
+    .blue   h2 { color: #3b82ff; }
+    .green  h2 { color: #29ffc6; }
+    .yellow h2 { color: #d7ff46; }
+
+    /* Card positions */
+    .concept  { left: -10px;  top: 120px; text-align: right; }
+    .hardware { right: -79px; top: 290px; }
+    .software { left: -80px;  top: 500px; text-align: right; }
+
+    /* ─── Map pins ────────────────────────────────── */
+    .pin {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border: 3px solid;
+      border-radius: 50%;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      animation: pinPulse 2s infinite;
+    }
+
+    .pin::after {
+      content: '';
+      position: absolute;
+      bottom: -18px;
+      width: 22px;
+      height: 22px;
+      border-right: 3px solid;
+      border-bottom: 3px solid;
+      border-color: inherit;
+      transform: rotate(45deg);
+      background: #00110d;
+    }
+
+    @keyframes pinPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.08); }
+    }
+
+    .blue-pin {
+      border-color: #3b82ff;
+      left: 265px; top: 140px;
+      box-shadow: 0 0 20px rgba(59,130,255,.5);
+    }
+
+    .green-pin {
+      border-color: #29ffc6;
+      right: 200px; top: 260px;
+      box-shadow: 0 0 20px rgba(41,255,198,.5);
+    }
+
+    .yellow-pin {
+      border-color: #d7ff46;
+      left: 200px; top: 480px;
+      box-shadow: 0 0 20px rgba(215,255,70,.5);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RULES SECTION
+    ═══════════════════════════════════════════════ */
+    .rules-section {
+      padding-top: 20px;
+      padding-bottom: var(--space-xl);
+      margin-top: -180px;
+    }
+
+    .rules-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    .rules-title {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 4.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      text-shadow:
+        0 0 6px  var(--neon-green),
+        0 0 18px rgba(0, 255, 136, 0.4);
+    }
+
+    .rules-bracket {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      border-color: var(--neon-green);
+      border-style: solid;
+      box-shadow: 0 0 8px var(--neon-green);
+    }
+
+    .rules-bracket--left  { border-width: 2px 0 0 2px; }
+    .rules-bracket--right { border-width: 0 2px 2px 0; }
+
+    /* ═══════════════════════════════════════════════
+       ACCORDION
+    ═══════════════════════════════════════════════ */
+    .accordion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      align-items: start;
+    }
+
+    .accordion-box {
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,136,0.3);
+      background: rgba(0,20,14,0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: border-color var(--ease), box-shadow var(--ease);
+    }
+
+    .accordion-box:hover {
+      border-color: rgba(0,255,136,0.7);
+      box-shadow: 0 0 28px rgba(0,255,136,0.18), inset 0 0 30px rgba(0,255,136,0.04);
+    }
+
+    .accordion-box--dark {
+      background: rgba(230,225,210,0.07);
+      border-color: rgba(230,225,210,0.2);
+    }
+
+    .accordion-box--dark:hover {
+      border-color: rgba(230,225,210,0.5);
+      box-shadow: 0 0 28px rgba(230,225,210,0.12);
+    }
+
+    /* ─── Accordion header button ─────────────────── */
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding: 22px 26px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: background var(--ease);
+    }
+
+    .accordion-header:focus-visible {
+      outline: 2px solid var(--neon-green);
+      outline-offset: -2px;
+    }
+
+    .accordion-header:hover { background: rgba(0,255,136,0.04); }
+    .accordion-box--dark .accordion-header:hover { background: rgba(255,255,255,0.04); }
+
+    .accordion-label {
+      font-family: var(--font-display);
+      font-size: clamp(0.85rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      color: rgb(62,202,230);
+      letter-spacing: 0.08em;
+      text-align: left;
+      line-height: 1.3;
+      text-shadow: 0 0 10px rgba(80,180,230,0.6);
+    }
+
+    .accordion-label--light {
+      color: #ef2f2f;
+      text-shadow: 0 0 10px rgba(235,153,126,0.5);
+    }
+
+    .accordion-toggle {
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--neon-green);
+      line-height: 1;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0,255,136,0.4);
+      border-radius: 50%;
+      transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .accordion-toggle--light {
+      color: #e8e0cc;
+      border-color: rgba(230,225,210,0.35);
+    }
+
+    .accordion-box.is-open .accordion-toggle {
+      transform: rotate(45deg);
+      background: rgba(30,19,235,0.15);
+      box-shadow: 0 0 12px rgba(41,227,140,0.5);
+    }
+
+    .accordion-box--dark.is-open .accordion-toggle {
+      background: rgba(228,79,79,0.12);
+      box-shadow: 0 0 12px rgba(239,179,130,0.3);
+    }
+
+    /* ─── Accordion body
+         FIX: Use max-height + visibility, NOT the `hidden` attribute.
+         The `hidden` attribute sets display:none which breaks CSS transitions.
+    ─────────────────────────────────────────────── */
+    .accordion-body {
+      padding: 0 26px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition:
+        max-height 0.45s cubic-bezier(0.4,0,0.2,1),
+        padding    0.35s ease,
+        opacity    0.35s ease;
+      /* Do NOT use the `hidden` attribute on these elements */
+    }
+
+    .accordion-body.is-open {
+      opacity: 1;
+      padding-bottom: 22px;
+      /* max-height is set via JS */
+    }
+
+    /* ─── Accordion list ──────────────────────────── */
+    .accordion-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .accordion-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      line-height: 1.55;
+      color: rgb(30,210,186);
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .accordion-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: rgb(30,210,186);
+      text-shadow: 0 0 6px var(--neon-green);
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+
+    .accordion-list li:hover { color: var(--text-primary); }
+
+    .accordion-list--light li {
+      color: #ed6267;
+    }
+
+    .accordion-list--light li::before {
+      color: #ef9d73;
+      text-shadow: 0 0 6px rgb(244,200,135);
+    }
+
+    .accordion-list--light li:hover { color: #e8e0cc; }
+
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL
+       FIX: Proper base + visible states
+    ═══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE — Tablet (≤1100px)
+    ═══════════════════════════════════════════════ */
     @media (max-width: 1100px) {
       .hero-container {
         flex-direction: column;
         align-items: center;
         gap: 50px;
       }
-      
+
       .left-panel, .right-panel {
         max-width: 100%;
         width: 100%;
       }
 
-      .center-panel {
-        height: 350px; 
+      .center-panel { height: 350px; }
+
+      .about-card-body { padding: 40px 100px 40px 40px; }
+
+      .road-wrapper { transform: scale(0.72); }
+
+      .card { width: 220px; }
+      .card h2 { font-size: 1.8rem; }
+      .card p  { font-size: 14px; }
+
+      .blue-pin {
+        left: 26%;
+        top: 120px;
+        transform: translateX(-50%);
       }
-      
-      .about-card-body {
-        padding: 40px 100px 40px 40px;
+      .green-pin {
+        left: 74%;
+        right: auto;
+        top: 260px;
+        transform: translateX(-50%);
       }
+      .yellow-pin {
+        left: 15%;
+        top: 480px;
+        transform: translateX(-50%);
+      }
+
+      .hardware { margin-right: -65px; }
+      .concept  { margin-left: -50px; }
+      .software { margin-left: -60px; text-align: right; }
     }
 
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE — Mobile (≤768px)
+    ═══════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      /* Nav Bar Adjustments */
+      /* Nav */
       header {
         width: 95%;
         padding: 10px 15px;
         gap: 15px;
-      }
-
-      .nav-links {
-        gap: 15px;
-        flex-wrap: wrap;
-      }
-
-      .nav-links a {
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-      }
-
-      .logo {
-        width: 35px;
-        height: 35px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      header {
         justify-content: space-between;
       }
 
-      /* Hero Content Adjustments */
-      .hero-container {
-        margin-top: 420px;
+      .nav-links { display: none; }
+
+      .logo { width: 35px; height: 35px; }
+
+      .mobile-brand { display: block; }
+
+      .menu-toggle {
+        display: inline-flex;
       }
 
-      .sci-fi-box {
-        padding: 25px;
-      }
+      /* Hero */
+      .hero-container { margin-top: 120px; }
 
-      .sci-fi-box h1 {
-        font-size: 1.8rem;
-      }
+      .sci-fi-box { padding: 25px; }
+      .sci-fi-box h1 { font-size: 1.8rem; }
+      .subtitle { font-size: 0.9rem; }
 
-      .subtitle {
-        font-size: 0.9rem;
-      }
+      .perk-badge { font-size: 1rem; padding: 12px 20px; }
 
-      .perk-badge {
-        font-size: 1rem;
-        padding: 12px 20px;
-      }
+      .center-panel { min-height: 250px; }
+      .register-btn-glow { padding: 15px 35px; font-size: 1.2rem; }
 
-      .center-panel {
-        min-height: 250px; 
-      }
-      
-      .register-btn-glow {
-        padding: 15px 35px;
-        font-size: 1.2rem;
-      }
-
-      /* About Section Adjustments */
-      .about-section {
-        padding: 60px 15px;
-      }
-
-      .about-title {
-        font-size: 2.8rem;
-        margin-bottom: 40px;
-      }
+      /* About */
+      .about-section { padding: 60px 15px; }
+      .about-title { font-size: 2.8rem; margin-bottom: 40px; }
 
       .card-wrapper {
         display: flex;
@@ -490,197 +1083,154 @@
         gap: 25px;
       }
 
-      /* Remove complex clip paths on mobile to prevent squishing bugs */
-      .border-glow-container {
-        clip-path: none;
-        border-radius: 20px;
-      }
-
+      /* Remove clip-path on mobile (prevents rendering bugs) */
+      .border-glow-container { clip-path: none; border-radius: 20px; }
       .about-card-body {
         clip-path: none;
         padding: 30px;
         border-radius: 18px;
       }
-
-      .about-card-body p {
-        width: 100%;
-        font-size: 1rem;
-        text-align: justify;
-      }
+      .about-card-body p { width: 100%; font-size: 1rem; text-align: justify; }
 
       .know-more-btn {
         margin-right: 0;
-        justify-self: center;
         align-self: center;
       }
-    }
 
-    /* --- Mobile Menu Drawer --- */
-    .menu-toggle {
-      display: inline-flex;
-      border: 1px solid rgba(0, 255, 102, 0.4);
-      background: rgba(0, 0, 0, 0.45);
-      color: #fff;
-      cursor: pointer;
-      width: 48px;
-      height: 48px;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 5px;
-      border-radius: 50%;
-      position: relative;
-      z-index: 10001;
-      transition: background 0.2s ease, transform 0.2s ease;
-      flex-shrink: 0;
-    }
+      .concept  { left: 80px;   top: auto; margin-top: -598px; text-align: left; }
+      .hardware { right: 80px; top: auto; margin-top: 30px;   text-align: center; }
+      .software { left: -20px;  top: auto; margin-top: -153px; text-align: center; }
 
-    .menu-toggle:hover {
-      background: rgba(0, 255, 102, 0.1);
-    }
-
-    .menu-toggle .bar {
-      width: 24px;
-      height: 3px;
-      background: var(--matrix-green);
-      display: block;
-      margin: 0;
-      border-radius: 999px;
-      box-shadow: 0 0 8px rgba(0, 255, 102, 0.85);
-      transition: transform 0.2s ease;
-    }
-    .mobile-h{
-      display: inline;
-    }
-    @media (min-width: 769px) {
-      .menu-toggle {
-        display: none;
+      /* Rules */
+      .rules-section {
+        margin-top: -80px;
+        padding-inline: 16px;
       }
-      .mobile-h{
-        display: none;
+
+      .rules-header { gap: 12px; }
+      .rules-title {
+        font-size: 1.8rem;
+        letter-spacing: 0.06em;
+        white-space: normal;
+        line-height: 1.3;
       }
+
+      .rules-bracket { width: 24px; height: 24px; }
+
+      .accordion-grid { grid-template-columns: 1fr; }
     }
 
-    .mobile-drawer {
-      position: fixed;
-      top: 0;
-      left: -320px;
-      width: 280px;
-      height: 100%;
-      background: rgba(0, 10, 5, 0.98);
-      box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
-      z-index: 20000;
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      transition: left 0.35s ease;
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE — Small mobile (≤480px)
+       NOTE: Must come AFTER ≤768px block
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .canvas{
+        margin-top: 100px;
+      }
+      
+      .road-wrapper {
+        transform: scale(1);
+        padding: 15px 10px;
+      }
+
+      .road-wrapper svg { height: 600px; }
+
+      .card { width: 30%; max-width: 160px; }
+      .card h2 { font-size: 1.1rem; }
+      .card p  { font-size: 12px; line-height: 1.4; }
+
+      .pin  { width: 52px; height: 52px; }
+
+      .blue-pin {
+        left: 45%;
+        top: 60px;
+        transform: translateX(-50%);
+      }
+
+      .green-pin {
+        left: 74%;
+        right: auto;
+        top: 220px;
+        transform: translateX(-50%);
+      }
+
+      .yellow-pin {
+        left: 15%;
+        top: 300px;
+        transform: translateX(-50%);
+      }
+
+      .concept  { margin-left:-25px;  margin-top: -560px; text-align:left}
+      .hardware { margin-right:-px;margin-top:-310px;text-align:right }
+      .software { margin-left:-10px; margin-top:-242px; text-align: right; }
+
+      /* Rules */
+      .rules-section {
+        margin-top: 10px;
+        padding-top: 10px;
+        padding-inline: 12px;
+      }
+
+      .rules-header { gap: 10px; }
+      .rules-title { font-size: 1.2rem; letter-spacing: 0.04em; }
+      .rules-bracket { width: 15px; height: 15px; box-shadow: 0 0 5px var(--neon-green); }
     }
-
-    .mobile-drawer.open {
-      left: 0;
-    }
-
-    .mobile-drawer .drawer-close {
-      align-self: flex-end;
-      border: none;
-      background: transparent;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    .mobile-drawer nav {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin-top: 10px;
-    }
-
-    .mobile-drawer nav a {
-      color: #fff;
-      text-decoration: none;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: color 0.25s ease;
-    }
-
-    .mobile-drawer nav a:hover {
-      color: var(--matrix-green);
-    }
-
-    .drawer-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.45);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-      z-index: 19000;
-    }
-
-    .drawer-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-
-    
   </style>
 </head>
 
 <body>
 
-  <svg width="0" height="0" style="position: absolute;">
+  <!-- ─── SVG clip-path definition (hidden, referenced by CSS) ─── -->
+  <svg width="0" height="0" style="position:absolute; pointer-events:none;">
     <defs>
       <clipPath id="custom-curve-clip" clipPathUnits="objectBoundingBox">
-        <path d="M 0.03,0 
-                 L 0.85,0 
+        <path d="M 0.03,0
+                 L 0.85,0
                  A 0.03 0.03 0 0 1 0.88 0.02
                  C 0.88 0.15, 0.75 0.35, 0.75 0.5
                  C 0.75 0.65, 0.88 0.85, 0.88 0.98
                  A 0.03 0.03 0 0 1 0.85 1
-                 L 0.03,1 
-                 A 0.03 0.03 0 0 1 0,0.95 
-                 L 0,0.05 
+                 L 0.03,1
+                 A 0.03 0.03 0 0 1 0,0.95
+                 L 0,0.05
                  A 0.03 0.03 0 0 1 0.03,0 Z" />
       </clipPath>
     </defs>
   </svg>
 
-  <canvas id="canvas3d"></canvas>
-  <canvas id="matrixCanvas"></canvas>
+  <!-- Matrix rain background (rendered by JS) -->
+  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
 
+  <!-- ─── NAV ─────────────────────────────────────────── -->
   <header>
-    <ul class="nav-links">
+    <ul class="nav-links" aria-label="Primary navigation">
       <li><a href="#home">Home</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#timeline">Timeline</a></li>
     </ul>
+
     <div class="logo">
-      <img src="image/logo.png" alt="logo" onerror="this.style.display='none'">
+      <img src="image/logo.png" alt="FusioniX logo" onerror="this.style.display='none'">
     </div>
-    <h2  class="mobile-h">FUSIONIX</h2>
-    <ul class="nav-links">
+
+    <span class="mobile-brand" aria-hidden="true">FUSIONIX</span>
+
+    <ul class="nav-links" aria-label="Secondary navigation">
       <li><a href="#teams">Teams</a></li>
       <li><a href="#sponsors">Sponsors</a></li>
-      <li><a href="#contact">Contact Us</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="menu-toggle" id="menuToggle" aria-label="Open mobile menu">
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open mobile menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </button>
   </header>
 
-  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+  <!-- ─── MOBILE DRAWER ────────────────────────────────── -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" role="dialog" aria-label="Mobile navigation">
     <button class="drawer-close" id="drawerClose" aria-label="Close mobile menu">×</button>
     <nav>
       <a href="#home">Home</a>
@@ -688,19 +1238,23 @@
       <a href="#timeline">Timeline</a>
       <a href="#teams">Teams</a>
       <a href="#sponsors">Sponsors</a>
-      <a href="#contact">Contact Us</a>
+      <a href="#contact">Contact</a>
     </nav>
   </div>
   <div class="drawer-overlay" id="drawerOverlay"></div>
 
+  <!-- ─── HERO ─────────────────────────────────────────── -->
   <section class="hero-section" id="home">
+    <!-- Spline 3-D canvas lives inside the hero so it doesn't overlap other sections -->
+    <canvas id="canvas3d" class="canvas" aria-hidden="true"></canvas>
+
     <div class="hero-container">
-      
       <div class="left-panel">
         <div class="sci-fi-box">
           <div class="tagline">INNOVATE &bull; BUILD &bull; SUSTAIN</div>
-          <h1>THE ULTIMATE<br>
-            <span class="text-glow">SUSTAINABLE<br> ECE & IOT</span><br>
+          <h1>
+            THE ULTIMATE<br>
+            <span class="text-glow">SUSTAINABLE<br>ECE &amp; IoT</span><br>
             INNOVATION<br>
             <span class="text-glow">HACKATHON</span>
           </h1>
@@ -709,151 +1263,341 @@
       </div>
 
       <div class="center-panel">
-        <button class="register-btn-glow">REGISTER NOW!!</button>
+        <button class="register-btn-glow" onclick="alert('Registration coming soon!')">REGISTER NOW!!</button>
       </div>
 
       <div class="right-panel">
         <div class="perk-badge">
           <div class="perk-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+            </svg>
           </div>
           50K Prize Pool
         </div>
-        
+
         <div class="perk-badge">
           <div class="perk-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
           </div>
           24Hr Hackathon
         </div>
-        
+
         <div class="perk-badge">
           <div class="perk-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
           </div>
-          Org. By ECE & CSE(IoT)
+          Org. By ECE &amp; CSE(IoT)
         </div>
       </div>
-
     </div>
   </section>
 
+  <!-- ─── ABOUT ─────────────────────────────────────────── -->
   <section class="about-section" id="about">
-    <h1 class="about-title">ABOUT <span class="text-glow">US</span></h1>
+    <h2 class="about-title">ABOUT <span class="text-glow">US</span></h2>
 
     <div class="card-wrapper">
       <div class="border-glow-container">
         <div class="about-card-body">
-          <p>FusioniX is a 24-hour hackathon by the Departments of ECE and CSE (IoT) at the University of Engineering &
-            Management, where participants transform ideas into real-world solutions through integrated hardware and
-            software innovation. With no fixed domain—spanning intelligent systems, environmental monitoring, industrial
-            safety, and beyond—teams ideate, design, and prototype across multiple competitive rounds. Judged on
-            creativity and real-world impact, top performers win prizes and cash rewards alongside valuable feedback
-            from industry experts. Full meals provided. At FusioniX, innovation is expected. Ideas become solutions.</p>
+          <p>FusioniX is a 24-hour hackathon by the Departments of ECE and CSE (IoT) at the University of Engineering
+            &amp; Management, where participants transform ideas into real-world solutions through integrated hardware and
+            software innovation. With no fixed domain — spanning intelligent systems, environmental monitoring, industrial
+            safety, and beyond — teams ideate, design, and prototype across multiple competitive rounds. Judged on
+            creativity and real-world impact, top performers win prizes and cash rewards alongside valuable feedback from
+            industry experts. Full meals provided. At FusioniX, innovation is expected. Ideas become solutions.</p>
         </div>
       </div>
-      <button class="know-more-btn">Want to Know More??</button>
+      <button class="know-more-btn">Want to Know More?</button>
     </div>
   </section>
 
- 
+  <!-- ─── TIMELINE ──────────────────────────────────────── -->
+  <section class="timeline-section" id="timeline">
+    <div class="timeline-header reveal">
+      <h2 class="timeline-title">Timeline</h2>
+      <div class="title-underline"></div>
+    </div>
+
+    <div class="road-wrapper">
+      <svg viewBox="0 0 900 1200" aria-hidden="true">
+        <!-- Solid road fill -->
+        <!-- <path class="road" d="
+          M 470 80
+          C 760 90, 760 240, 480 250
+          C 180 260, 180 420, 640 430
+          C 860 440, 760 650, 350 690
+          C 80 720, 120 930, 650 960
+        "/> -->
+
+        <!-- Road edge borders -->
+        <!-- <path class="road-border" d="
+          M 470 80
+          C 760 90, 760 240, 480 250
+          C 180 260, 180 420, 640 430
+          C 860 440, 760 650, 350 690
+          C 80 720, 120 930, 650 960
+        "/> -->
+
+        <!-- Animated dashed centre line -->
+        <path class="road-line" d="
+          M 470 80
+          C 760 90, 760 240, 480 250
+          C 180 260, 180 420, 640 430
+          C 860 440, 760 650, 350 690
+          C 80 720, 120 930, 650 960
+        "/>
+      </svg>
+
+      <!-- Stage cards -->
+      <div class="card concept blue reveal" data-delay="100">
+        <h2>Concept Qualifier</h2>
+        <p>Teams submit pitch decks and videos online</p>
+      </div>
+
+      <div class="card hardware green reveal" data-delay="250">
+        <h2>Hardware &amp; Architecture Phase</h2>
+        <p>Teams assemble components and design architecture offline</p>
+      </div>
+
+      <div class="card software yellow reveal" data-delay="400">
+        <h2>Software &amp; Logic Sprint</h2>
+        <p>Teams develop and integrate software with hardware offline</p>
+      </div>
+
+      <!-- Map pins -->
+      <div class="pin blue-pin"   aria-hidden="true">✦</div>
+      <div class="pin green-pin"  aria-hidden="true">⌘</div>
+      <div class="pin yellow-pin" aria-hidden="true">⚙</div>
+    </div>
+  </section>
+
+  <!-- ─── RULES ──────────────────────────────────────────── -->
+  <section class="rules-section" id="rules">
+    <div class="rules-header reveal">
+      <div class="rules-bracket rules-bracket--left" aria-hidden="true"></div>
+      <h2 class="rules-title">Rules &amp; Regulations</h2>
+      <div class="rules-bracket rules-bracket--right" aria-hidden="true"></div>
+    </div>
+
+    <div class="accordion-grid">
+
+      <!-- DO'S -->
+      <div class="accordion-box reveal" data-delay="100">
+        <button class="accordion-header" aria-expanded="false" aria-controls="dos-body">
+          <span class="accordion-label">Do's</span>
+          <span class="accordion-toggle" aria-hidden="true">+</span>
+        </button>
+        <!-- FIX: no `hidden` attribute — max-height transition handles visibility -->
+        <div class="accordion-body" id="dos-body" role="region">
+          <ul class="accordion-list">
+            <li>Work strictly within the hackathon duration</li>
+            <li>Bring your own laptops and required components</li>
+            <li>Maintain originality in all submissions</li>
+            <li>Follow all timelines and submission rules</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DON'TS -->
+      <div class="accordion-box accordion-box--dark reveal" data-delay="250">
+        <button class="accordion-header" aria-expanded="false" aria-controls="donts-body">
+          <span class="accordion-label accordion-label--light">Don'ts</span>
+          <span class="accordion-toggle accordion-toggle--light" aria-hidden="true">+</span>
+        </button>
+        <div class="accordion-body" id="donts-body" role="region">
+          <ul class="accordion-list accordion-list--light">
+            <li>Do not use pre-built projects or prior work</li>
+            <li>Do not use generative AI tools during the event</li>
+            <li>Do not copy or plagiarize code or ideas</li>
+            <li>Do not use mobile phones or smart devices during rounds</li>
+            <li>Do not violate any event protocols or instructions</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SCRIPTS
+       Order matters:
+         1. Inline utilities (matrix rain, drawer)
+         2. Module script (Spline + page features)
+  ═══════════════════════════════════════════════════════ -->
 
   <script>
-    const matrixCanvas = document.getElementById('matrixCanvas');
-    const ctx = matrixCanvas.getContext('2d');
+    /* ─── Matrix rain ─────────────────────────────────── */
+    (function initMatrix() {
+      const canvas = document.getElementById('matrixCanvas');
+      const ctx    = canvas.getContext('2d');
+      const CHARS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=_';
+      const FS     = 16;
+      let drops    = [];
 
-    const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=_";
-    const fontSize = 16;
-    let columns = 0;
-    let rainDrops = [];
-
-    function initRain() {
-      rainDrops = [];
-      for (let x = 0; x < columns; x++) {
-        rainDrops[x] = 1;
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drops = Array.from({ length: Math.floor(canvas.width / FS) }, () => 1);
       }
-    }
 
-    function resizeCanvas() {
-      matrixCanvas.width = window.innerWidth;
-      matrixCanvas.height = window.innerHeight;
-      columns = Math.floor(matrixCanvas.width / fontSize);
-      initRain();
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+      function draw() {
+        ctx.fillStyle = 'rgba(3, 12, 8, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00FF66';
+        ctx.font = FS + 'px monospace';
 
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileDrawer = document.getElementById('mobileDrawer');
-    const drawerClose = document.getElementById('drawerClose');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-
-    function openDrawer() {
-      mobileDrawer.classList.add('open');
-      drawerOverlay.classList.add('open');
-      mobileDrawer.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeDrawer() {
-      mobileDrawer.classList.remove('open');
-      drawerOverlay.classList.remove('open');
-      mobileDrawer.setAttribute('aria-hidden', 'true');
-    }
-
-    menuToggle?.addEventListener('click', openDrawer);
-    drawerClose?.addEventListener('click', closeDrawer);
-    drawerOverlay?.addEventListener('click', closeDrawer);
-    mobileDrawer?.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', closeDrawer);
-    });
-
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(3, 12, 8, 0.15)';
-      ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-
-      ctx.fillStyle = '#00FF66';
-      ctx.font = fontSize + 'px monospace';
-
-      for (let i = 0; i < rainDrops.length; i++) {
-        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
-        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-        if (rainDrops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-          rainDrops[i] = 0;
-        }
-        rainDrops[i]++;
+        drops.forEach((y, i) => {
+          ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * FS, y * FS);
+          if (y * FS > canvas.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        });
       }
-    }
 
-    setInterval(drawMatrix, 33);
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(draw, 33);
+    })();
+
+    /* ─── Mobile drawer ───────────────────────────────── */
+    (function initDrawer() {
+      const toggle  = document.getElementById('menuToggle');
+      const drawer  = document.getElementById('mobileDrawer');
+      const close   = document.getElementById('drawerClose');
+      const overlay = document.getElementById('drawerOverlay');
+
+      function open() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+
+      function shut() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+
+      toggle?.addEventListener('click', open);
+      close?.addEventListener('click', shut);
+      overlay?.addEventListener('click', shut);
+      drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', shut));
+    })();
   </script>
 
   <script type="module">
+    /* ─── Spline 3-D scene ────────────────────────────── */
     import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.89/build/runtime.js';
 
     const splineCanvas = document.getElementById('canvas3d');
     const app = new Application(splineCanvas);
 
-    app.load('https://prod.spline.design/60rcxftHjrZq554K/scene.splinecode').then(() => {
+    app.load('https://prod.spline.design/60rcxftHjrZq554K/scene.splinecode')
+      .then(() => {
         const robot = app.findObjectByName('Robot');
-        if (!robot) {
-          console.error('Spline object "Robot" not found.');
-          return;
+        if (!robot) { console.warn('Spline: "Robot" object not found.'); return; }
+
+        function centerRobot() {
+          robot.position.x = 0;
+          robot.position.y = 0;
         }
+        centerRobot();
+        window.addEventListener('resize', centerRobot);
+      })
+      .catch(err => console.warn('Spline failed to load:', err));
 
-        function updateRobotPosition(){
-            // Keep it perfectly centered relative to the screen on all devices
-            robot.position.x = 0;
-            robot.position.y = 0; 
-        }
+    /* ─── Scroll reveal ────────────────────────────────
+       FIX: observe elements, add .visible class on entry.
+       CSS defines the base + visible states.
+    ───────────────────────────────────────────────── */
+    (function initReveal() {
+      const targets = document.querySelectorAll('.reveal');
+      if (!targets.length) return;
 
-        updateRobotPosition();
-        window.addEventListener('resize', updateRobotPosition);
-    });
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el    = entry.target;
+          const delay = parseInt(el.dataset.delay || '0', 10);
+          setTimeout(() => el.classList.add('visible'), delay);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
- 
+      targets.forEach(t => observer.observe(t));
+    })();
 
+    /* ─── Accordion ────────────────────────────────────
+       FIX: Removed `hidden` attribute usage.
+       We control visibility only via max-height + opacity (CSS transitions).
+    ───────────────────────────────────────────────── */
+    (function initAccordions() {
+      const boxes = document.querySelectorAll('.accordion-box');
+      if (!boxes.length) return;
 
+      boxes.forEach(box => {
+        const btn    = box.querySelector('.accordion-header');
+        const body   = box.querySelector('.accordion-body');
+        const toggle = box.querySelector('.accordion-toggle');
+        if (!btn || !body || !toggle) return;
+
+        btn.addEventListener('click', () => {
+          const isOpen = box.classList.contains('is-open');
+          if (isOpen) {
+            collapse(box, body, btn, toggle);
+          } else {
+            expand(box, body, btn, toggle);
+          }
+        });
+      });
+
+      function expand(box, body, btn, toggle) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.classList.add('is-open');
+        box.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        toggle.textContent = '−';
+      }
+
+      function collapse(box, body, btn, toggle) {
+        body.style.maxHeight = '0px';
+        body.classList.remove('is-open');
+        box.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        toggle.textContent = '+';
+      }
+    })();
+
+    /* ─── Timeline card float animation ────────────────── */
+    (function initFloatCards() {
+      document.querySelectorAll('.card').forEach((card, i) => {
+        card.animate(
+          [
+            { transform: 'translateY(0px)' },
+            { transform: 'translateY(-10px)' },
+            { transform: 'translateY(0px)' },
+          ],
+          { duration: 3000 + i * 500, iterations: Infinity, easing: 'ease-in-out' }
+        );
+      });
+    })();
   </script>
 
 </body>
